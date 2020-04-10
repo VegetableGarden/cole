@@ -1,0 +1,39 @@
+{
+	"manifest_version": 2,
+	"name": "cole",
+	"version": "0.0.1",
+	"description": "A chrome extension to fast access github repo",
+	"icons":
+	{
+		"16": "img/cole.png",
+		"48": "img/cole.png",
+		"128": "img/cole.png"
+	},
+	"background":
+	{
+		"page": "background.html"
+	},
+	"page_action":
+	{
+		"default_icon": "img/cole.png",
+		"default_title": "More easy to use github",
+		"default_popup": "popup.html"
+	},
+	"omnibox": { "keyword" : "co" },
+	"content_scripts":
+	[
+		{
+			"matches": ["https://github.com/*"],
+			"js": ["js/content-scripts.js"],
+			"css": [],
+			"run_at": "document_start"
+		}
+	],
+	"content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+	"permissions":
+	[
+		"contextMenus",
+		"storage",
+		"declarativeContent"
+	]
+}
