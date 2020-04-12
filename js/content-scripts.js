@@ -107,6 +107,7 @@ const renderRepos = (repos) => {
     $(".cole-search-bar-input").keydown(function(e){
         searchRepoHotkeyProcessor(e)
     });
+    $(".cole-search-bar-input").focus()
 }
 
 const reRenderSearchResult = (repos) => {
