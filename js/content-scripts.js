@@ -33,7 +33,7 @@ const getTokenAndUsername = () => {
 }
 
 var keyCodeNumber = {
-    o: 79, r: 82, f: 70, a: 65, s: 83, z: 90, t: 84, x: 88, one: 49, c: 67, dot: 190
+    o: 79, r: 82, f: 70, a: 65, s: 83, z: 90, t: 84, x: 88, one: 49, c: 67, dot: 190, esc:27
 }
 
 const searchRepoHotkeyProcessor = (e) => {
@@ -43,7 +43,7 @@ const searchRepoHotkeyProcessor = (e) => {
         var cmdOrCtrlKey = e.metaKey || e.ctrlKey
         var altKey = e.altKey
 
-        if (cmdOrCtrlKey && keyCode == keyCodeNumber.dot) {
+        if ((cmdOrCtrlKey && keyCode == keyCodeNumber.dot) || (isSearchBarExist() && keyCode == keyCodeNumber.esc) ) {
             if (isSearchBarExist()) {
                 closeSearchBar()
             } else {
@@ -78,8 +78,9 @@ const showSearchBar = () => {
     loadAllRepos()
     .then(([priviteRepos, publicRepos]) => {
         renderRepos(priviteRepos.concat(publicRepos).map(r => ({name: r.full_name, src: r.html_url})))
+        renderRepos(m.map(r => ({name: r.full_name, src: r.html_url})))
+
     })
-    
 }
 
 const renderRepos = (repos) => {
@@ -87,18 +88,35 @@ const renderRepos = (repos) => {
 	panel.className = 'cole-search'
     panel.innerHTML = 
     `
-<div class="cole-search">
     <div class="cole-search-content">
         <div class="cole-search-bar">
             <input type="text" placeholder="Smart Search GitHub Repo" class="cole-search-bar-input">
         </div>
         <div class="cole-search-result">
-        ${repos.map(r => buildItem(r.name, r.src)).join('')}
+        ${repos.slice(0, 10).map(r => buildItem(r.name, r.src)).join('')}
         </div>
     </div>
-</div>
     `;
     document.querySelector('.cole-search-warp').appendChild(panel)
+    $(".cole-search-bar-input").on("input",function(e){
+        const _repos = repos
+        const inputValue = e.delegateTarget.value
+        const queryRegex = new RegExp(inputValue, 'i')
+        reRenderSearchResult(_repos.filter(r => queryRegex.test(r.name)))
+    });
+    $(".cole-search-bar-input").keydown(function(e){
+        searchRepoHotkeyProcessor(e)
+    });
+}
+
+const reRenderSearchResult = (repos) => {
+    $('.cole-search-result').replaceWith(buildItems(repos))
+}
+const buildItems = (repos) => {
+    return $(
+`<div class="cole-search-result">
+    ${repos.slice(0, 10).map(r => buildItem(r.name, r.src)).join('')}
+</div>`)
 }
 
 const buildItem = (name, src) => {
