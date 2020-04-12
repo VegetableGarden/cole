@@ -24,8 +24,8 @@
 	[
 		{
 			"matches": ["https://github.com/*"],
-			"js": ["js/content-scripts.js"],
-			"css": [],
+			"js": ["js/global.js", "js/content-scripts.js"],
+			"css": ["css/content-css.css"],
 			"run_at": "document_start"
 		}
 	],
