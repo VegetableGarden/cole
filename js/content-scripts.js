@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-
+    initSearchWarp()
     HotKeyProcessor.push((e) => {
         try {
             var keyCode = e.keyCode || e.which || e.charCode
@@ -24,11 +24,24 @@ var keyCodeNumber = {
 
 const searchRepoHotkeyProcessor = (cmdOrCtrlKey, shiftKey, altKey, keyCode) => {
     if (cmdOrCtrlKey && keyCode == keyCodeNumber.dot) {
-        console.log(111)
-        showSearchBar()
+        if (isSearchBarExist()) {
+            closeSearchBar()
+        } else {
+            showSearchBar()
+        }
         e.preventDefault()
         return
     }
+}
+
+const closeSearchBar = () => document.querySelector('.cole-search-warp').removeChild(document.querySelector('.cole-search'))
+
+const isSearchBarExist = () => document.querySelector('.cole-search')
+
+const initSearchWarp = () => {
+    const warp = document.createElement('div')
+    warp.className = 'cole-search-warp'
+    document.body.appendChild(warp)
 }
 
 
@@ -55,8 +68,8 @@ const showSearchBar = () => {
         </div>
     </div>
 </div>
-	`;
-    document.body.appendChild(panel)
+    `;
+    document.querySelector('.cole-search-warp').appendChild(panel)
 }
 
 const buildItem = (value, src) => {
