@@ -24,7 +24,7 @@
 	[
 		{
 			"matches": ["https://github.com/*"],
-			"js": ["js/global.js", "js/content-scripts.js"],
+			"js": ["lib/jquery.js", "js/global.js", "js/github-provider.js", "js/content-scripts.js"],
 			"css": ["css/content-css.css"],
 			"run_at": "document_start"
 		}
@@ -34,6 +34,7 @@
 	[
 		"contextMenus",
 		"storage",
-		"declarativeContent"
+		"declarativeContent",
+		"tabs"
 	]
 }
